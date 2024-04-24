@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sp" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" th:href="@{/chat.css}" />
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Chat</h2>
+
+        <!-- Aquí se mostrarán los mensajes -->
+        <div class="messages-container">
+            <!-- Sección para mostrar los mensajes -->
+            <div th:each="mensaje : ${mensajes}" class="message">
+                <div class="message-container" th:class="${mensaje.esBot} ? 'bot-message' : 'user-message'">
+                    <strong th:text="${mensaje.remitente}"></strong>: <span th:text="${mensaje.mensaje}"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <form action="/form" method="post">
+            <!-- Campo para el contenido del mensaje -->
+            <input type="text" id="message" name="message" placeholder="Escribe un mensaje...">
+            <!-- Botón para enviar el formulario -->
+            <button type="submit">Enviar</button>
+        </form>
+
+    </div>
+
+    <script>
+        // Obtener el contenedor de mensajes después de que el DOM se haya cargado completamente
+        document.addEventListener("DOMContentLoaded", function () {
+            var messagesContainer = document.querySelector('.messages-container');
+
+            // Desplazar el contenedor de mensajes hacia abajo
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+    </script>
+</body>
+
+</html>
