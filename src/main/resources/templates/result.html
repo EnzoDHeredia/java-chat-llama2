@@ -4,30 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
+    <title>Result</title>
     <link rel="stylesheet" th:href="@{/chat.css}" />
 </head>
 
 <body>
     <div class="container">
+
         <h2>Chat</h2>
 
         <!-- Aquí se mostrarán los mensajes -->
         <div class="messages-container">
             <!-- Sección para mostrar los mensajes -->
-            <div th:each="mensaje : ${mensajes}" class="message">
+            <div th:each="mensaje : ${conversacion.mensajes}" class="message">
                 <div class="message-container" th:class="${mensaje.esBot} ? 'bot-message' : 'user-message'">
-                    <strong th:text="${mensaje.remitente}"></strong>: <span th:text="${mensaje.mensaje}"></span>
+                    <strong th:text="${mensaje.remitente}"></strong>: <span class="formatted-text" th:text="${mensaje.mensaje}"></span>
                 </div>
             </div>
         </div>
 
 
-        <form action="/form" method="post">
+        <form action="/chat" method="post">
             <!-- Campo para el contenido del mensaje -->
+            <input type="hidden" name="conversacionId" th:value="${conversacion.id}">
             <input type="text" id="message" name="message" placeholder="Escribe un mensaje...">
             <!-- Botón para enviar el formulario -->
             <button type="submit">Enviar</button>
+        </form>
+
+        <!-- Botón para ir al inicio de la conversación -->
+        <button type="submit" onclick="window.location.href='/conversaciones'">Volver al Inicio</button>
+
+        <!-- Enlace para iniciar una nueva conversación -->
+        <form th:action="@{/chat}" method="get">
+            <input type="hidden" name="conversacionId" th:value="${-1L}">
+            <button type="submit">Iniciar Nueva Conversación</button>
         </form>
 
     </div>

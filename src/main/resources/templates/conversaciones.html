@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Conversaciones</title>
+    <link rel="stylesheet" th:href="@{/chat.css}"/>
+</head>
+<body>
+
+    <h1>Lista de Conversaciones</h1>
+    <div th:each="conversacion : ${conversaciones}">
+        <form th:action="@{/chat}" method="get">
+            <input type="hidden" name="conversacionId" th:value="${conversacion.id}">
+            <button type="submit">Conversación <span th:text="${conversacion.id}"></span></button>
+        </form>
+        <br> <!-- Agrega un salto de línea para separar los botones -->
+    </div>
+    
+
+    <!-- Enlace para iniciar una nueva conversación -->
+    <form th:action="@{/chat}" method="get">
+        <input type="hidden" name="conversacionId" th:value="${-1L}">
+        <button type="submit">Iniciar Nueva Conversación</button>
+    </form>
+    
+
+    </div>
+</body>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.chatgpt.chatgpt.entities.Conversacion;
 import com.chatgpt.chatgpt.entities.Mensaje;
 import com.chatgpt.chatgpt.service.MensajeriaService;
 
@@ -24,34 +25,42 @@ public class ChatController {
         this.chatClient = chatClient;
     }
 
-    @GetMapping("/form")
-    public String showForm(Model model) {
-
-        model.addAttribute("mensajes", mensajeService.obtenerTodosLosMensajes());
-        return "form";
+    @GetMapping("/conversaciones")
+    public String listarConversaciones(Model model) {
+        model.addAttribute("conversaciones", mensajeService.obtenerTodasLasConversaciones());
+        return "conversaciones";
     }
 
-    @PostMapping("/form")
-    public String processForm(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message, Model model) {
+    @GetMapping("/chat")
+    public String showForm(@RequestParam(value = "conversacionId") Long id, Model model) {
+        model.addAttribute("conversacion", buscarConversacion(id));
+        return "chat";
+    }
 
-        Mensaje mensaje = new Mensaje();
-        mensaje.setRemitente("Usuario");
-        mensaje.setEsBot(false);
-        mensaje.setMensaje(message);
+    @PostMapping("/chat")
+    public String processForm(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message, Model model, @RequestParam(value = "conversacionId") Long conversacionId) {
+        Conversacion conversacion = buscarConversacion(conversacionId);
+
+        Mensaje mensaje = new Mensaje("Usuario",false,message, conversacion);
+        conversacion.addMensaje(mensaje);
+
+        Mensaje mensajeBot = new Mensaje("Ollama",true,this.chatClient.call(message), conversacion);
+        conversacion.addMensaje(mensajeBot);
         
-
-        //model.addAttribute("message", new Message(message));
-        Mensaje mensaje1 = new Mensaje();
-        mensaje1.setRemitente("Ollama");
-        mensaje1.setEsBot(true);
-        mensaje1.setMensaje(this.chatClient.call(message));
-
-        mensajeService.guardarMensaje(mensaje);
-        mensajeService.guardarMensaje(mensaje1);
+        mensajeService.guardarConversacion(conversacion);
         
-
-        model.addAttribute("mensajes", mensajeService.obtenerTodosLosMensajes());
+        model.addAttribute("conversacion", conversacion);
         return "result"; 
     }
 
+    public Conversacion buscarConversacion(Long conversacionId){
+        if (conversacionId != -1L) {
+            Conversacion conversacion = mensajeService.obtenerConversacionPorId(conversacionId);
+            return conversacion;
+        }else{
+            Conversacion conversacion = new Conversacion();
+            mensajeService.guardarConversacion(conversacion);
+            return conversacion;
+        }
+    }
 }

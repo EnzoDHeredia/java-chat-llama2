@@ -5,20 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.chatgpt.chatgpt.entities.Mensaje;
-import com.chatgpt.chatgpt.repositories.MensajeriaRepository;
+import com.chatgpt.chatgpt.entities.Conversacion;
+import com.chatgpt.chatgpt.repositories.ConversacionRepository;
 
 @Service
 public class MensajeriaService {
 
     @Autowired
-    private MensajeriaRepository mensajeriaRepository;
+    private ConversacionRepository conversacionRepository;
 
-    public void guardarMensaje(Mensaje mensaje) {
-        mensajeriaRepository.save(mensaje);
+    public List<Conversacion> obtenerTodasLasConversaciones() {
+        return conversacionRepository.findAll();
     }
 
-    public List<Mensaje> obtenerTodosLosMensajes(){
-        return mensajeriaRepository.findAll();
+    public Conversacion obtenerConversacionPorId(Long id) {
+        return conversacionRepository.findById(id).orElse(null);
+    }
+
+    public void guardarConversacion(Conversacion conversacion) {
+        conversacionRepository.save(conversacion);
     }
 }
