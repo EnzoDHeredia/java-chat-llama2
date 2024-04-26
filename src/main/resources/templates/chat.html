@@ -11,35 +11,49 @@
 <body>
     <div class="container">
 
-        <h2>Chat</h2>
+        <div class="header">
+            <h2>Chat <span th:text="${conversacion.id}"></span></h2>
+            <div class="accordion-container">
+                <button class="accordion-btn" onclick="toggleAccordion()">Opciones</button>
+                <div class="accordion-content" id="accordion-content">
+                    <!-- Contenido del acordeón -->
+                    <div class="accordion-buttons">
+                        <button type="submit" onclick="window.location.href='/conversaciones'">Volver al Inicio</button>
+                        <form th:action="@{/chat}" method="get">
+                            <input type="hidden" name="conversacionId" th:value="${-1L}">
+                            <button type="submit">Iniciar Nueva Conversación</button>
+                        </form>
+                        <form th:action="@{/eliminar-conversacion}" method="post">
+                            <input type="hidden" name="conversacionId" th:value="${conversacion.id}">
+                            <button type="submit">Eliminar Conversación</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Aquí se mostrarán los mensajes -->
         <div class="messages-container">
             <!-- Sección para mostrar los mensajes -->
             <div th:each="mensaje : ${conversacion.mensajes}" class="message">
                 <div class="message-container" th:class="${mensaje.esBot} ? 'bot-message' : 'user-message'">
-                    <strong th:text="${mensaje.remitente}"></strong>: <span class="formatted-text" th:text="${mensaje.mensaje}"></span>
+                    <strong th:text="${mensaje.remitente}"></strong>: <span class="formatted-text"th:text="${mensaje.mensaje}"></span>
                 </div>
             </div>
         </div>
 
 
         <form action="/chat" method="post">
-            <!-- Campo para el contenido del mensaje -->
-            <input type="hidden" name="conversacionId" th:value="${conversacion.id}">
-            <input type="text" id="message" name="message" placeholder="Escribe un mensaje...">
-            <!-- Botón para enviar el formulario -->
-            <button type="submit">Enviar</button>
+            <div class="form-container">
+                <!-- Campo para el contenido del mensaje -->
+                <input type="hidden" name="conversacionId" th:value="${conversacion.id}">
+                <input type="text" id="message" name="message" placeholder="Escribe un mensaje...">
+                <!-- Botón para enviar el formulario -->
+                <button type="submit">Enviar</button>
+            </div>
         </form>
 
-        <!-- Botón para ir al inicio de la conversación -->
-        <button type="submit" onclick="window.location.href='/conversaciones'">Volver al Inicio</button>
-
-        <!-- Enlace para iniciar una nueva conversación -->
-        <form th:action="@{/chat}" method="get">
-            <input type="hidden" name="conversacionId" th:value="${-1L}">
-            <button type="submit">Iniciar Nueva Conversación</button>
-        </form>
+        
 
     </div>
 
@@ -51,6 +65,22 @@
             // Desplazar el contenedor de mensajes hacia abajo
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var accordions = document.querySelectorAll('.accordion-btn');
+            accordions.forEach(function (accordion) {
+                accordion.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    var content = this.nextElementSibling;
+                    if (content.style.display === 'block') {
+                        content.style.display = 'none';
+                    } else {
+                        content.style.display = 'block';
+                    }
+                });
+            });
+        });
+
     </script>
 </body>
 

@@ -8,7 +8,7 @@ body {
 .messages-container {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 0 50px 50px;
+    padding: 0 40px 40px;
 }
 .formatted-text{
     white-space: pre-wrap; /* Mantener los saltos de línea y envolver el texto cuando sea necesario */
@@ -25,6 +25,13 @@ body {
     height: 85vh;
 }
 
+.conversation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+}
+
+
 .user-message {
     background-color: #cceeff;
     border-radius: 8px;
@@ -40,21 +47,24 @@ body {
     margin-left: 50%;
     margin-bottom: 5px;
 }
+.form-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
 
 input[type="text"] {
-    width: 100%;
+    flex: 1; /* Hace que el input ocupe todo el espacio disponible */
     padding: 15px;
     font-size: 18px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+    margin-right: 10px; /* Agrega un margen a la derecha del input para separarlo del botón */
 }
 
 button[type="submit"] {
-    display: block;
-    margin: 0 auto 10px; /* Agrega un margen inferior de 10px */
     padding: 10px 20px;
+    margin: 0 auto 10px; /* Agrega un margen inferior de 10px */
     font-size: 16px;
     background-color: #007bff;
     color: #fff;
@@ -69,4 +79,57 @@ button[type="submit"]:hover {
 
 ::placeholder {
     color: #ccc;
+}
+
+/* acordeon */
+
+.header {
+    display: flex; /* Hace que los elementos dentro del contenedor se muestren en línea */
+    justify-content: space-between; /* Distribuye los elementos horizontalmente */
+    margin-bottom: 20px; /* Ajusta el margen inferior según sea necesario */
+}
+
+
+/* Alinea el título "Chat" a la izquierda */
+h2 {
+    margin-right: auto; /* Empuja el título hacia la izquierda */
+}
+
+/* Estilos para el acordeón */
+.accordion-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alinea el contenido al final del contenedor */
+}
+
+.accordion-btn {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    width: fit-content; /* Ajusta el ancho al contenido */
+    text-align: left;
+}
+
+.accordion-content {
+    display: none;
+    padding: 10px;
+}
+
+.accordion-content.active {
+    display: block;
+}
+
+.accordion-buttons {
+    display: flex;
+    flex-direction: row; /* Cambia la dirección a horizontal */
+}
+
+.accordion-buttons button {
+    margin-right: 10px; /* Ajusta el margen entre los botones */
+    margin-bottom: 5px;
 }

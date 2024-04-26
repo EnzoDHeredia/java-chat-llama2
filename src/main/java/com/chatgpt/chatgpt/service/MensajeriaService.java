@@ -25,4 +25,8 @@ public class MensajeriaService {
     public void guardarConversacion(Conversacion conversacion) {
         conversacionRepository.save(conversacion);
     }
+
+    public void eliminarConversacionPorId(Long id){
+        conversacionRepository.deleteById(id);
+    }
 }
